@@ -45,12 +45,12 @@ class PojazdMiejski(models.Model):
 
     rodzaj = models.CharField(max_length=20, choices=Rodzaj.choices)
     typNapedu = models.CharField(max_length=20, choices=TypNapedu.choices)
-    rodzaj = models.CharField(max_length=20, choices=Rodzaj.choices)
+    wzrost = models.CharField(max_length=20, choices=Wzrost.choices, default=Wzrost.DOROSLI)
     kolor = models.CharField(max_length=45)
     kodSprzetu = models.CharField(max_length=45)
 
 
-class PojazdyWDokac(models.Model):
+class PojazdyWDokach(models.Model):
     idDok = models.ForeignKey('Dok', on_delete=models.CASCADE)
     idPojazdMiejski = models.ForeignKey('PojazdMiejski', on_delete=models.CASCADE)
 
