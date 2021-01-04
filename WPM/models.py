@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+# Modele odpowiadają tabelom w bazie danych.
 
 class DaneOsobowe(models.Model):
     class Plec(models.TextChoices):  # Zdefiniowanie ENUM
@@ -19,6 +19,12 @@ class DaneOsobowe(models.Model):
     email = models.CharField(max_length=100)
     numerTelefonu = models.CharField(max_length=12)
 
+    # Wolne, niedokładne tłumaczenie:
+    # Zwróci imię i nazwisko w panelu Adminostratora przy przegldzie danych w bazie danych.
+    """
+    def __str__(self):
+        return self.imie, self.nazwisko
+    """
 
 class Wypozyczenia(models.Model):
     idDaneOsobowe = models.ForeignKey('DaneOsobowe', on_delete=models.CASCADE)
