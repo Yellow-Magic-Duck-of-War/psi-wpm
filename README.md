@@ -15,9 +15,9 @@
 * [x] Schemat bazy danych do projektu – plik w repozytorium.
 * [x] Zewnętrzna baza danych (nie wbudowany SQLite).
 * [x] Modele stworzone w Django, zmigrowane na zewnętrzny serwer bazy danych.
-* 50/50 Uzupełnienie przykładowych danych.
-* 50/50 Przygotowanie odpowiednich serializerów.
-* 50/50 Przygotować odpowiednie widoki.
+* [ ] 50/50 Uzupełnienie przykładowych danych.
+* [ ] 50/50 Przygotowanie odpowiednich serializerów.
+* [ ] 50/50 Przygotować odpowiednie widoki.
 * [ ] Ustawić paginację, filtrowanie, sortowanie i wyszukiwanie.
 * [ ] Ustawić logowanie i autentykacje, ustawić sensowne prawa dostępu (np. brak możliwości modyfikacji użytkowników z poziomu aplikacji).
 * [ ] Dodać testy jednostkowe.
