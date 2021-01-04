@@ -18,6 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('WPM.urls')),
+    path('admin/', admin.site.urls),    # Strona administratora
+    path('', include('WPM.urls')),      # Import wszystkich url z API
 ]
