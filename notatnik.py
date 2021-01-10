@@ -22,3 +22,24 @@
     
     CTRL + PAUSE - wyłączenie serwera
 """
+
+"""
+    Groups:
+    * Administraotrzy
+    * Klienci
+    
+    Users: 
+    * Login: superuser, Hasło: Rok2020Ssie
+    * Login: administrator, Hasło: Kontrabanda69
+    * Login: tester001, Hasło: Prochibicja20
+"""
+
+# Widoki:
+"""
+    Uprawnienia:
+    * AllowAny - Wszyscy mają dostęp.
+    * IsAuthenticated - Tylko zarejstrowani mają dostęp.
+    * IsAdminUser - Tylko administratorzy mają dostel.
+    * IsAuthenticatedOrReadOnly - Wszyscy czytają, zarejestrowani edytują.
+    
+"""
