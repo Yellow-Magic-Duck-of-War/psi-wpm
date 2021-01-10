@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',       # Framework dla zarządzania plikami statycznymi
     'WPM.apps.WpmConfig',               # Nazwa aplikacji
     'rest_framework',                   # Rest framework
+    'django_filters',                   # Filtry Django
 ]
 
 MIDDLEWARE = [

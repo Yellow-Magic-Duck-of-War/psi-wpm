@@ -1,20 +1,20 @@
 from django.urls import path, include
-from . import views                      # Import wszystkich widoków
+from . import views                      # Import wszystkich widoków z 'views.py'.
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 
-router.register('UserWidok', views.UserWidok)
-router.register('GroupWidok', views.GroupWidok)
+router.register(r'UserWidok', views.UserWidok)
+router.register(r'GroupWidok', views.GroupWidok)
 
-router.register('DaneOsoboweWidok', views.DaneOsoboweWidok)
-router.register('DokWidok', views.DokWidok)
-router.register('LokalizacjaWidok', views.LokalizacjaWidok)
-router.register('PojazdMiejskiWidok', views.PojazdMiejskiWidok)
-router.register('PojazdyWDokachWidok', views.PojazdyWDokachWidok)
-router.register('RozliczenieWidok', views.RozliczenieWidok)
-router.register('StawkaWidok', views.StawkaWidok)
-router.register('WypozyczeniaWidok', views.WypozyczeniaWidok)
+router.register(r'DaneOsoboweWidok', views.DaneOsoboweWidok)
+router.register(r'DokWidok', views.DokWidok)
+router.register(r'LokalizacjaWidok', views.LokalizacjaWidok)
+router.register(r'PojazdMiejskiWidok', views.PojazdMiejskiWidok)
+router.register(r'PojazdyWDokachWidok', views.PojazdyWDokachWidok)
+router.register(r'RozliczenieWidok', views.RozliczenieWidok)
+router.register(r'StawkaWidok', views.StawkaWidok)
+router.register(r'WypozyczeniaWidok', views.WypozyczeniaWidok)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -32,6 +32,32 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
 
+# requaet=True jeśli w kolumnie modelu jest not null
+
+"""
+    Różnica między gwiazdkami:
+    
+    validated_data - 
+    
+    *validated_data - dowolna liczba parametrów
+    
+    **validated_data - przekazanie słownika
+    
+    NA PRZYKŁAD:
+    
+    def create(self, validated_data):
+        return NazwaModelu.object.create(**validated_data)
+        
+    def update(self, instance, validated_data):
+        instance.nazwaKolumny = validated_data.get('nazwaKolumny', instance.nazwaKolumny)
+        .
+        .
+        .
+        instance.save()
+        return instance
+    
+    Skończyłem 
+"""
 
 # Serializer użytkownika:
 class UserSerializer(serializers.HyperlinkedModelSerializer):
