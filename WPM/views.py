@@ -1,9 +1,7 @@
 from django.contrib.auth.models import User, Group
 from django.shortcuts import get_object_or_404
 from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter, FilterSet
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
 
 from rest_framework import viewsets
 from rest_framework import generics
@@ -13,16 +11,14 @@ from rest_framework import permissions
 from rest_framework import reverse
 from rest_framework import status
 
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-
-
+# from rest_framework.renderers import JSONRenderer
+# from rest_framework.parsers import JSONParser
 
 # Import modeli z pliku 'models.py':
-from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
+from .models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
 
 # Import serializerów z pliku 'serializers.py':
-from WPM.serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerializer, PojazdMiejskiSerializer, \
+from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerializer, PojazdMiejskiSerializer, \
     PojazdyWDokachSerializer, RozliczenieSerializer, StawkaSerializer, WypozyczeniaSerializer, \
     UserSerializer, GroupSerializer
 
@@ -398,10 +394,21 @@ class WypozyczeniaWidok(viewsets.ModelViewSet):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Inny sposób na widoki:
+# Widoki '@csrf_exempt' i '@api_view':
+
+"""
+from rest_framework.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework.views import 
+from rest_framework.response import Response
+from .models import DaneOsobowe
+from .serializers import DaneOsoboweSerializer
+from rest_framework import status
+from django.http import HttpResponse
+
 
 # @csrf_exempt
-@api_view(['GET', 'POST'])           # Pozwala na obsługę GET i POST
+@api_view(['GET', 'POST'])
 def dane_osobwe_list(request):
     if request.method == 'GET':
 
@@ -418,7 +425,6 @@ def dane_osobwe_list(request):
         serializer = DaneOsoboweSerializer(data=request.data)
 
         if serializer.is_valid():
-
             serializer.save()
 
             # return JsonResponse(serializer.data, status=201)
@@ -452,7 +458,6 @@ def dane_osobwe_detale(request, pk):
         serializer = DaneOsoboweSerializer(dane_osobowe, data=request.data)
 
         if serializer.is_valid():
-
             serializer.save()
 
             # return JsonResponse(serializer.data)
@@ -467,3 +472,73 @@ def dane_osobwe_detale(request, pk):
 
         # return HttpResponse(status=204)
         return HttpResponse(status.HTTP_204_NO_CONTENT)
+"""
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Widoki - APIViews:
+
+"""
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import DaneOsobowe
+from .serializers import DaneOsoboweSerializer
+from rest_framework import status
+
+
+class DaneOsoboweListAPIView(APIView):
+
+    def get(self, request):
+        dane_osobowe = DaneOsobowe.objects.all()
+        serializer = DaneOsoboweSerializer(dane_osobowe, many=True)
+
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = DaneOsoboweSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class DaneOsoboweDetailAPIView(APIView):
+
+    def get_object(self, pk):
+
+        try:
+            return DaneOsobowe.objects.get(pk=pk)
+
+        except DaneOsobowe.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, pk):
+
+        dane_osobwe = self.get_object(pk)
+        serializer = DaneOsoboweSerializer(dane_osobwe)
+
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+
+        dane_osobwe = self.get_object(pk)
+        serializer = DaneOsoboweSerializer(dane_osobwe, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+
+        dane_osobwe = self.get_object(pk)
+
+        dane_osobwe.delete()
+
+        return Response(status.HTTP_204_NO_CONTENT)
+"""
