@@ -67,23 +67,25 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 """
 
-""" Z wykładu 7."""
+# ----------------------------------------------------------------------------------------------------------------------
 
 
+# Z wykładu 7:
 class APIRoot(generics.GenericAPIView):
-    name = 'api-view'
+
+    name = 'api-root'
 
     def get(self, request, *args, **kwargs):
         # 'adres-o-nazwie-modelu': reverse(NazwaWidokuGenerycznegoList.name, request=request),
 
-        return Response({'dane-osobowe': reverse(DaneOsoboweList.name, request=request),
-                         'dok': reverse(DokList.name, request=request),
-                         'lokalizacja': reverse(LokalizacjaList.name, request=request),
-                         'pojazd-miejski': reverse(PojazdMiejskiList.name, request=request),
-                         'pojazdy-w-dokach': reverse(PojazdyWDokachList.name, request=request),
-                         'rozliczenie': reverse(RozliczenieList.name, request=request),
-                         'stawka': reverse(StawkaList.name, request=request),
-                         'wypozyczenia': reverse(WypozyczeniaList.name, request=request),
+        return Response({'dane-osobowe':        reverse(DaneOsoboweList.name,       request=request),
+                         'dok':                 reverse(DokList.name,               request=request),
+                         'lokalizacja':         reverse(LokalizacjaList.name,       request=request),
+                         'pojazd-miejski':      reverse(PojazdMiejskiList.name,     request=request),
+                         'pojazdy-w-dokach':    reverse(PojazdyWDokachList.name,    request=request),
+                         'rozliczenie':         reverse(RozliczenieList.name,       request=request),
+                         'stawka':              reverse(StawkaList.name,            request=request),
+                         'wypozyczenia':        reverse(WypozyczeniaList.name,      request=request),
                          })
 
 
@@ -91,336 +93,231 @@ class APIRoot(generics.GenericAPIView):
 
 
 class DaneOsoboweList(generics.ListCreateAPIView):
+
     queryset = DaneOsobowe.objects.all()
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
     name = 'dane-osobowe-list'
-    filter_fields = ['imie', 'nazwisko']
-    search_fields = ['imie', 'nazwisko']
-    ordering_fields = ['imie', 'nazwisko']
+
+    # filter_fields = ['imie', 'nazwisko']
+    # search_fields = ['imie', 'nazwisko']
+    # ordering_fields = ['imie', 'nazwisko']
 
     """
     def list(self, request):
         queryset = self.get_queryset()
         serializer = DaneOsoboweSerializer(queryset, many=True)
 
-        return response(serializer.data)
+        return Response(serializer.data)
     """
 
 
 class DaneOsoboweDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = DaneOsobowe.objects.all()
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
     name = 'dane-osobowe-detail'
-    filter_fields = ['imie', 'nazwisko']
-    search_fields = ['imie', 'nazwisko']
-    ordering_fields = ['imie', 'nazwisko']
+
+    # filter_fields = ['imie', 'nazwisko']
+    # search_fields = ['imie', 'nazwisko']
+    # ordering_fields = ['imie', 'nazwisko']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class DokList(generics.ListCreateAPIView):
+
     queryset = Dok.objects.all()
     serializer_class = DokSerializer
 
     name = 'dok-list'
-    filter_fields = ['nazwa', 'iloscMiejsc']
-    search_fields = ['nazwa', 'kraj', 'wojewodztwo', 'miasto', 'ulica']
-    ordering_fields = ['nazwa']
+
+    # filter_fields = ['nazwa', 'iloscMiejsc']
+    # search_fields = ['nazwa', 'kraj', 'wojewodztwo', 'miasto', 'ulica']
+    # ordering_fields = ['nazwa']
 
 
 class DokDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Dok.objects.all()
     serializer_class = DokSerializer
 
     name = 'dok-detail'
-    filter_fields = ['imie', 'nazwisko']
-    search_fields = ['imie', 'nazwisko']
-    ordering_fields = ['imie', 'nazwisko']
+
+    # filter_fields = ['imie', 'nazwisko']
+    # search_fields = ['imie', 'nazwisko']
+    # ordering_fields = ['imie', 'nazwisko']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class LokalizacjaList(generics.ListCreateAPIView):
+
     queryset = Lokalizacja.objects.all()
     serializer_class = LokalizacjaSerializer
 
     name = 'lokalizacja-list'
-    filter_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
-    search_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
-    ordering_fields = ['ostatniaAktualizacja']
+
+    # filter_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
+    # search_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
+    # ordering_fields = ['ostatniaAktualizacja']
 
 
 class LokalizacjaDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Lokalizacja.objects.all()
     serializer_class = LokalizacjaSerializer
 
     name = 'lokalizacja-Detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class PojazdMiejskiList(generics.ListCreateAPIView):
+
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
     name = 'pojazd-miejski-list'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 class PojazdMiejskiDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
     name = 'pojazd-miejski-detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class PojazdyWDokachList(generics.ListCreateAPIView):
+
     queryset = PojazdyWDokach.objects.all()
     serializer_class = PojazdyWDokachSerializer
 
     name = 'pojazdy-w-dokach-list'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 class PojazdyWDokachDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = PojazdyWDokach.objects.all()
     serializer_class = PojazdyWDokachSerializer
 
     name = 'pojazdy-w-dokach-detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class RozliczenieList(generics.ListCreateAPIView):
+
     queryset = Rozliczenie.objects.all()
     serializer_class = RozliczenieSerializer
 
     name = 'rozliczenie-list'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 class RozliczenieDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Rozliczenie.objects.all()
     serializer_class = RozliczenieSerializer
 
     name = 'rozliczenie-detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class StawkaList(generics.ListCreateAPIView):
+
     queryset = Stawka.objects.all()
     serializer_class = StawkaSerializer
 
     name = 'stawka-list'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 class StawkaDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Stawka.objects.all()
     serializer_class = StawkaSerializer
 
     name = 'stawka-detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class WypozyczeniaList(generics.ListCreateAPIView):
+
     queryset = Wypozyczenia.objects.all()
     serializer_class = WypozyczeniaSerializer
 
     name = 'wypozyczenia-list'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 class WypozyczeniaDetail(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Wypozyczenia.objects.all()
     serializer_class = WypozyczeniaSerializer
 
     name = 'wypozyczenia-detail'
-    filter_fields = ['']
-    search_fields = ['']
-    ordering_fields = ['']
+
+    # filter_fields = ['']
+    # search_fields = ['']
+    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Widok Użytkowników:
-class UserWidok(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]   # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAdminUser]                  # Poziom dostępu: Admin
-
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = UserSerializer(user)
-
-        return Response(serializer.data)
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-
-# Widok Grup:
-class GroupWidok(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAdminUser]                 # Poziom dostępu: Admin
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-
-# Widok Danych Osobowych:
-class DaneOsoboweWidok(viewsets.ModelViewSet):
-    queryset = DaneOsobowe.objects.all()
-    serializer_class = DaneOsoboweSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticated]             # Poziom dostępu: Każdy zarejestrowany
-
-    # def list(self, request): pass                         # Lista obiaktów z bazy danych
-    # def create(self, request): pass                       # Strorzenie obiektu w bazie danych
-    # def retrieve(self, request, pk=None): pass            # Konkretny obiekt z bazy danych
-    # def update(self, request, pk=None): pass              # Aktualizacja obiektu z bazy danych
-    # def partial_update(self, request, pk=None): pass      #
-    # def destroy(self, request, pk=None): pass             # Usunięcie obiktu z bazy danych
-
-    """
-        Jeżeli [akcja] == list lub create to ma do niej dostęp tylko administrator.
-        Do pozostałych ma dostęp każdy użytkownik.
-    """
-
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [permissions.IsAdminUser]
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-
-        return [permission() for permission in permission_classes]
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-
-class DokWidok(viewsets.ModelViewSet):
-    queryset = Dok.objects.all()
-    serializer_class = DokSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class LokalizacjaWidok(viewsets.ModelViewSet):
-    queryset = Lokalizacja.objects.all()
-    serializer_class = LokalizacjaSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class PojazdMiejskiWidok(viewsets.ModelViewSet):
-    queryset = PojazdMiejski.objects.all()
-    serializer_class = PojazdMiejskiSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class PojazdyWDokachWidok(viewsets.ModelViewSet):
-    queryset = PojazdyWDokach.objects.all()
-    serializer_class = PojazdyWDokachSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class RozliczenieWidok(viewsets.ModelViewSet):
-    queryset = Rozliczenie.objects.all()
-    serializer_class = RozliczenieSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticated]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class StawkaWidok(viewsets.ModelViewSet):
-    queryset = Stawka.objects.all()
-    serializer_class = StawkaSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAdminUser]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-class WypozyczeniaWidok(viewsets.ModelViewSet):
-    queryset = Wypozyczenia.objects.all()
-    serializer_class = WypozyczeniaSerializer
-
-    # authentication_classes = [authentication.TokenAuthentication]  # Wymagany token rejestracji.
-    # permission_classes = [permissions.IsAuthenticated]  # Poziom dostępu: Każdy zarejestrowany
-
-
-# ----------------------------------------------------------------------------------------------------------------------
+"""STARE WIDOKI PRZENIESIONE TYMCZASOWO DO NOTATNIKA"""
 
 # Widoki '@csrf_exempt' i '@api_view':
 

@@ -19,6 +19,7 @@ router.register(r'WypozyczeniaWidok', views.WypozyczeniaWidok)
 """
 urlpatterns = [
     # path('', include(router.urls)),
+    path('',                            views.APIRoot.as_view(),                name=views.APIRoot.name),
 
     path('dane-osobowe',                views.DaneOsoboweList.as_view(),        name=views.APIRoot.name),
     path('dane-osobowe/<int:pk>',       views.DaneOsoboweDetail.as_view(),      name=views.APIRoot.name),
@@ -43,8 +44,6 @@ urlpatterns = [
 
     path('wypozyczenia',                views.WypozyczeniaList.as_view(),       name=views.APIRoot.name),
     path('wypozyczenia/<int:pk>',       views.WypozyczeniaDetail.as_view(),     name=views.APIRoot.name),
-
-    path('',                            views.APIRoot.as_view(),                name=views.APIRoot.name),
 ]
 
 """
