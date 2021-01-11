@@ -8,7 +8,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import authentication
 from rest_framework import permissions
-from rest_framework import reverse
+from rest_framework.reverse import reverse
 from rest_framework import status
 
 # from rest_framework.renderers import JSONRenderer
@@ -56,8 +56,36 @@ from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerial
     6. Dodaj własne filtry na datę i liczby jako przedział od - do.
 """
 
-
 # Widoki Genryczne:
+
+"""
+Biblioteki:
+from .models import (...)
+from .serializers import (...)
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+"""
+
+""" Z wykładu 7."""
+
+
+class APIRoot(generics.GenericAPIView):
+    name = 'api-view'
+
+    def get(self, request, *args, **kwargs):
+        # 'adres-o-nazwie-modelu': reverse(NazwaWidokuGenerycznegoList.name, request=request),
+
+        return Response({'dane-osobowe': reverse(DaneOsoboweList.name, request=request),
+                         'dok': reverse(DokList.name, request=request),
+                         'lokalizacja': reverse(LokalizacjaList.name, request=request),
+                         'pojazd-miejski': reverse(PojazdMiejskiList.name, request=request),
+                         'pojazdy-w-dokach': reverse(PojazdyWDokachList.name, request=request),
+                         'rozliczenie': reverse(RozliczenieList.name, request=request),
+                         'stawka': reverse(StawkaList.name, request=request),
+                         'wypozyczenia': reverse(WypozyczeniaList.name, request=request),
+                         })
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -65,7 +93,7 @@ from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerial
 class DaneOsoboweList(generics.ListCreateAPIView):
     queryset = DaneOsobowe.objects.all()
     serializer_class = DaneOsoboweSerializer
-    permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [permissions.IsAdminUser]
 
     name = 'dane-osobowe-list'
     filter_fields = ['imie', 'nazwisko']
@@ -397,6 +425,7 @@ class WypozyczeniaWidok(viewsets.ModelViewSet):
 # Widoki '@csrf_exempt' i '@api_view':
 
 """
+Biblioteki:
 from rest_framework.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.views import 
@@ -479,6 +508,7 @@ def dane_osobwe_detale(request, pk):
 # Widoki - APIViews:
 
 """
+Biblioteki:
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import DaneOsobowe

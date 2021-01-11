@@ -22,24 +22,4 @@ from WPM import views
 urlpatterns = [
     path('admin/', admin.site.urls),    # Strona administratora.
     path('', include('WPM.urls')),      # Import wszystkich url z API.
-
-    """
-        # Widoki - @csrf_exempt i @api_view:
-    
-        # Adres : Widok - lista rekordów 'daneOsobwe'
-        path('dane-osobowe/', views.dane_osobwe_list),
-    
-        # Adres : Widok - kontretny rekord z 'daneOsobowe'    
-        path('dane-osobowe/<int:pk>', views.dane_osobwe_detale),    
-    """
-
-    """
-        # Widoki - APIViews:
-    
-        # Adres : Widok - lista rekordów 'daneOsobwe'
-        path('dane-osobowe/', views.DaneOsoboweListAPIView.as_view()),
-    
-        # Adres : Widok - kontretny rekord z 'daneOsobowe'
-        path('dane-osobowe/<int:pk>', views.DaneOsoboweDetailAPIView.as_view()),
-    """
 ]
