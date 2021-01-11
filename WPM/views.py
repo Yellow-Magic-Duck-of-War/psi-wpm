@@ -1,3 +1,27 @@
+from django.contrib.auth.models import User, Group
+from django.shortcuts import get_object_or_404
+from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter, FilterSet
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, JsonResponse
+
+from rest_framework import viewsets
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import authentication
+from rest_framework import permissions
+from rest_framework import reverse
+
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+# Import modeli z pliku 'models.py':
+from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
+
+# Import serializerów z pliku 'serializers.py':
+from WPM.serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerializer, PojazdMiejskiSerializer, \
+    PojazdyWDokachSerializer, RozliczenieSerializer, StawkaSerializer, WypozyczeniaSerializer, \
+    UserSerializer, GroupSerializer
+
 # ĆWICZENIE 6
 """
     Celem ćwiczeń będzie stworzenie widoków (endpointów),
@@ -31,30 +55,6 @@
     5. Ustaw filtry i sortowanie na poszczególne widoki.
     6. Dodaj własne filtry na datę i liczby jako przedział od - do.
 """
-
-from django.contrib.auth.models import User, Group
-from django.shortcuts import get_object_or_404
-from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter, FilterSet
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
-
-from rest_framework import viewsets
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import authentication
-from rest_framework import permissions
-from rest_framework import reverse
-
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-
-# Import modeli z pliku 'models.py':
-from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
-
-# Import serializerów z pliku 'serializers.py':
-from WPM.serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerializer, PojazdMiejskiSerializer, \
-    PojazdyWDokachSerializer, RozliczenieSerializer, StawkaSerializer, WypozyczeniaSerializer, \
-    UserSerializer, GroupSerializer
 
 
 # Widoki Genryczne:
@@ -263,7 +263,7 @@ class UserWidok(viewsets.ModelViewSet):
     # authentication_classes = [authentication.TokenAuthentication]   # Wymagany token rejestracji.
     # permission_classes = [permissions.IsAdminUser]                  # Poziom dostępu: Admin
 
-    def lista(self, request):
+    def list(self, request):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
 
@@ -397,11 +397,10 @@ class WypozyczeniaWidok(viewsets.ModelViewSet):
 # Inny sposób na widoki:
 
 @csrf_exempt
-def DaneOsobweLista(request):
-
+def dane_osobwe_lista(request):
     if request.method == 'GET':
-        daneOsobowe = DaneOsobowe.objects.all()
-        serializer = DaneOsoboweSerializer(daneOsobowe, many=True)
+        dane_osobowe = DaneOsobowe.objects.all()
+        serializer = DaneOsoboweSerializer(dane_osobowe, many=True)
 
         return JsonResponse(serializer.data, safe=False)
 
@@ -415,26 +414,26 @@ def DaneOsobweLista(request):
 
         return JsonResponse(serializer.errors, status=400)
 
+
 @csrf_exempt
-def DaneOsobweDetale(request, pk):
+def dane_osobwe_detale(request, pk):
     try:
-        daneOsobowe = DaneOsobowe.objects.get(pk=pk)
+        dane_osobowe = DaneOsobowe.objects.get(pk=pk)
     except DaneOsobowe.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = DaneOsoboweSerializer(daneOsobowe)
+        serializer = DaneOsoboweSerializer(dane_osobowe)
         return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
         dane = JSONParser().parse(request)
-        serializer = DaneOsoboweSerializer(daneOsobowe, data=dane)
+        serializer = DaneOsoboweSerializer(dane_osobowe, data=dane)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        daneOsobowe.delete()
+        dane_osobowe.delete()
         return HttpResponse(status=204)
-
