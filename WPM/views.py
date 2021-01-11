@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter, FilterSet
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
 
 from rest_framework import viewsets
 from rest_framework import generics
@@ -10,9 +11,12 @@ from rest_framework.response import Response
 from rest_framework import authentication
 from rest_framework import permissions
 from rest_framework import reverse
+from rest_framework import status
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+
+
 
 # Import modeli z pliku 'models.py':
 from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
@@ -396,44 +400,70 @@ class WypozyczeniaWidok(viewsets.ModelViewSet):
 
 # Inny sposób na widoki:
 
-@csrf_exempt
-def dane_osobwe_lista(request):
+# @csrf_exempt
+@api_view(['GET', 'POST'])           # Pozwala na obsługę GET i POST
+def dane_osobwe_list(request):
     if request.method == 'GET':
+
         dane_osobowe = DaneOsobowe.objects.all()
         serializer = DaneOsoboweSerializer(dane_osobowe, many=True)
 
-        return JsonResponse(serializer.data, safe=False)
+        # return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     elif request.method == 'POST':
-        dane = JSONParser().parse(request)
-        serializer = DaneOsoboweSerializer(data=dane)
+
+        # dane = JSONParser().parse(request)
+        # serializer = DaneOsoboweSerializer(data=dane)
+        serializer = DaneOsoboweSerializer(data=request.data)
 
         if serializer.is_valid():
+
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
 
-        return JsonResponse(serializer.errors, status=400)
+            # return JsonResponse(serializer.data, status=201)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+
+        # return JsonResponse(serializer.errors, status=400)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET', 'PUT', 'DELETE'])
 def dane_osobwe_detale(request, pk):
     try:
         dane_osobowe = DaneOsobowe.objects.get(pk=pk)
     except DaneOsobowe.DoesNotExist:
-        return HttpResponse(status=404)
+
+        # return HttpResponse(status=404)
+        return Response(status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
+
         serializer = DaneOsoboweSerializer(dane_osobowe)
-        return JsonResponse(serializer.data)
+
+        # return JsonResponse(serializer.data)
+        return Response(serializer.data)
 
     elif request.method == 'PUT':
-        dane = JSONParser().parse(request)
-        serializer = DaneOsoboweSerializer(dane_osobowe, data=dane)
+
+        # dane = JSONParser().parse(request)
+        # serializer = DaneOsoboweSerializer(dane_osobowe, data=dane)
+        serializer = DaneOsoboweSerializer(dane_osobowe, data=request.data)
+
         if serializer.is_valid():
+
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+
+            # return JsonResponse(serializer.data)
+            return Response(serializer.data)
+
+        # return JsonResponse(serializer.errors, status=400)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+
         dane_osobowe.delete()
-        return HttpResponse(status=204)
+
+        # return HttpResponse(status=204)
+        return HttpResponse(status.HTTP_204_NO_CONTENT)

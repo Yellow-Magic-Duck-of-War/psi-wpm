@@ -17,7 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from WPM import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),    # Strona administratora.
     path('', include('WPM.urls')),      # Import wszystkich url z API.
+
+    path('dane-osobowe/', views.dane_osobwe_list),              # Adres : Widok - lista 'daneOsobwe'
+    path('dane-osobowe/<int:pk>', views.dane_osobwe_detale),    # Adres : Widok - kontretny rekord z 'daneOsobowe'
 ]
