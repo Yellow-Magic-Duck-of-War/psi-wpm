@@ -1,7 +1,7 @@
 # Projekt - Wypożyczalnia Pojazdów Miejskich
 
 ## Model bazy danych
-![Model bazy danych](https://github.com/krzyszu1996/PSI-20-21/blob/main/wyporzyczalnia-pojazdow-miejskich.png)
+![Model bazy danych](https://github.com/Yellow-Magic-Duck-of-War/psi-wpm/blob/master/wyporzyczalnia-pojazdow-miejskich.png)
 
 
 ## Zaliczenie:
