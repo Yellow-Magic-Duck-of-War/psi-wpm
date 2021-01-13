@@ -16,11 +16,11 @@
 * [x] Zewnętrzna baza danych (nie wbudowany SQLite).
 * [x] Modele stworzone w Django, zmigrowane na zewnętrzny serwer bazy danych.
 * [ ] 50/50 Uzupełnienie przykładowych danych.
-* [ ] 99% Przygotowanie odpowiednich serializerów.
-* [ ] 99% Przygotować odpowiednie widoki.
-* [ ] 1/4 Ustawić paginację, filtrowanie, sortowanie i wyszukiwanie.
+* [x] Przygotowanie odpowiednich serializerów.
+* [x] Przygotować odpowiednie widoki.
+* [x] Ustawić paginację, filtrowanie, sortowanie i wyszukiwanie.
 * [ ] Ustawić logowanie i autentykacje, ustawić sensowne prawa dostępu (np. brak możliwości modyfikacji użytkowników z poziomu aplikacji).
 * [ ] Dodać testy jednostkowe.
-* [ ] Wszystko wrzucić do repozytorium.
+* [ ] 50/50 Wszystko wrzucić do repozytorium.
 
 Czas na wykonanie – do ostatnich ćwiczeń, zaliczenie podczas ćwiczeń. Jeśli nie wystarczy czasu, indywidualnie w czasie sesji 
