@@ -15,11 +15,12 @@ from rest_framework import status
 # from rest_framework.parsers import JSONParser
 
 # Import modeli z pliku 'models.py':
-from .models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
+from .models import DaneOsobowe, AdresZamieszkania, Dok, Lokalizacja, PojazdMiejski, PojazdWDoku, Rozliczenie, \
+    Stawka, Wypozyczenie
 
 # Import serializerów z pliku 'serializers.py':
-from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerializer, PojazdMiejskiSerializer, \
-    PojazdyWDokachSerializer, RozliczenieSerializer, StawkaSerializer, WypozyczeniaSerializer, \
+from .serializers import DaneOsoboweSerializer, AdresZamieszkaniaSerializer, DokSerializer, LokalizacjaSerializer, \
+    PojazdMiejskiSerializer, PojazdWDokuSerializer, RozliczenieSerializer, StawkaSerializer, WypozyczenieSerializer, \
     UserSerializer, GroupSerializer
 
 # ĆWICZENIE 6
@@ -34,11 +35,11 @@ from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerial
     ✓ 3. Dodaj 'rest_framework' do zainstalowanych aplikacji w swoim projekcie Django,
     ✓ 4. Dodaj widoki drf do urlpatterns swojego projektu: url(r'^api-auth/', include('rest_framework.urls'))
 
-    50/50 5. Stwórz widoki dla swoich modeli na podstawie dokumentacji.
-             A następnie dodaj je do urlpatterns by wyświetliły się w liście dostępnych endpointów API.
-           * Zwróć uwagę, które modele powinny mieć możliwość dodawania, usuwania czy edytowania informacji.
-             Może niektóre powinny tylko wyświetlać dane?
-           * Pamiętaj by zastosować serializery z poprzednich zajęć.
+    ✓ 5. Stwórz widoki dla swoich modeli na podstawie dokumentacji. A następnie dodaj je do urlpatterns by wyświetliły
+         się w liście dostępnych endpointów API.
+    ✓  * Zwróć uwagę, które modele powinny mieć możliwość dodawania, usuwania czy edytowania informacji.
+         Może niektóre powinny tylko wyświetlać dane?
+    ✓  * Pamiętaj by zastosować serializery z poprzednich zajęć.
 
     6. Dodaj zezwolenia do aplikacji, tak by tylko zarejestrowani uzytkownicy mogli korzystać z endpointów.
     7. Dodaj endpointy, które są dostępne tylko dla administratora.
@@ -46,14 +47,14 @@ from .serializers import DaneOsoboweSerializer, DokSerializer, LokalizacjaSerial
 
 # ĆWICZENIE 7
 """
-    1. Dodaj widok oparty na GenericAPIView pozwalający na nawigację po API.
-    2. Zamiast wartości kluczy obcych wstaw pole opisujące dany rekord.
+    ✓ 1. Dodaj widok oparty na GenericAPIView pozwalający na nawigację po API.
+    ? 2. Zamiast wartości kluczy obcych wstaw pole opisujące dany rekord.
        (np. nazwisko, nazwa, tytuł) - użyj SlugRelatedField z klasy HyperlinkedModelSerializer.
     3. W związach jeden do wielu po stronie jeden wstaw linki do rekordów,
        po stronie wiele - użyj HyperlinkedRelatedField z klasy HyperlinkedModelSerializer.
-    4. Ustaw globalną paginację z liczbą pozycji na stronę 5.
-    5. Ustaw filtry i sortowanie na poszczególne widoki.
-    6. Dodaj własne filtry na datę i liczby jako przedział od - do.
+    ✓ 4. Ustaw globalną paginację z liczbą pozycji na stronę 5.
+    ✓ 5. Ustaw filtry i sortowanie na poszczególne widoki.
+    ✓ 6. Dodaj własne filtry na datę i liczby jako przedział od - do.
 """
 
 # Widoki Genryczne:
@@ -67,42 +68,52 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 """
 
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 # Z wykładu 7:
 class APIRoot(generics.GenericAPIView):
-
     name = 'api-root'
 
     def get(self, request, *args, **kwargs):
         # 'adres-o-nazwie-modelu': reverse(NazwaWidokuGenerycznegoList.name, request=request),
 
-        return Response({'dane-osobowe':        reverse(DaneOsoboweList.name,       request=request),
-                         'dok':                 reverse(DokList.name,               request=request),
-                         'lokalizacja':         reverse(LokalizacjaList.name,       request=request),
-                         'pojazd-miejski':      reverse(PojazdMiejskiList.name,     request=request),
-                         'pojazdy-w-dokach':    reverse(PojazdyWDokachList.name,    request=request),
-                         'rozliczenie':         reverse(RozliczenieList.name,       request=request),
-                         'stawka':              reverse(StawkaList.name,            request=request),
-                         'wypozyczenia':        reverse(WypozyczeniaList.name,      request=request),
+        return Response({'dane-osobowe': reverse(DaneOsoboweList.name, request=request),
+                         'adres-zamieszkania': reverse(AdresZamieszkaniaList.name, request=request),
+                         'dok': reverse(DokList.name, request=request),
+                         'lokalizacja': reverse(LokalizacjaList.name, request=request),
+                         'pojazd-miejski': reverse(PojazdMiejskiList.name, request=request),
+                         'pojazdy-w-dokach': reverse(PojazdWDokuList.name, request=request),
+                         'rozliczenie': reverse(RozliczenieList.name, request=request),
+                         'stawka': reverse(StawkaList.name, request=request),
+                         'wypozyczenia': reverse(WypozyczenieList.name, request=request),
                          })
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
+class DaneOsoboweFilter(FilterSet):
+    from_data_urodzenia = DateTimeFilter(field_name='data_urodzenia', lookup_expr='gte')
+    to_data_urodzenia = DateTimeFilter(field_name='data_urodzenia', lookup_expr='lte')
+
+    class Meta:
+        model = DaneOsobowe
+        fields = ['from_data_urodzenia', 'to_data_urodzenia']
+
 
 class DaneOsoboweList(generics.ListCreateAPIView):
-
     queryset = DaneOsobowe.objects.all()
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
     name = 'dane-osobowe-list'
 
-    # filter_fields = ['imie', 'nazwisko']
-    # search_fields = ['imie', 'nazwisko']
-    # ordering_fields = ['imie', 'nazwisko']
+    filter_class = DaneOsoboweFilter
+
+    filter_fields = ['imie', 'nazwisko']
+    search_fields = ['imie', 'nazwisko']
+    ordering_fields = ['imie', 'nazwisko']
 
     """
     def list(self, request):
@@ -114,205 +125,192 @@ class DaneOsoboweList(generics.ListCreateAPIView):
 
 
 class DaneOsoboweDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = DaneOsobowe.objects.all()
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
     name = 'dane-osobowe-detail'
 
-    # filter_fields = ['imie', 'nazwisko']
-    # search_fields = ['imie', 'nazwisko']
-    # ordering_fields = ['imie', 'nazwisko']
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class AdresZamieszkaniaList(generics.ListCreateAPIView):
+    queryset = AdresZamieszkania.objects.all()
+    serializer_class = AdresZamieszkaniaSerializer
+    # permission_classes = [permissions.IsAdminUser]
+
+    name = 'adres-zamieszkania-list'
+
+    filter_fields = ['ulica', 'miasto', 'kodPocztowy']
+    search_fields = ['ulica', 'miasto', 'kodPocztowy']
+    ordering_fields = ['ulica', 'miasto', 'kodPocztowy']
+
+
+class AdresZamieszkaniaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AdresZamieszkania.objects.all()
+    serializer_class = AdresZamieszkaniaSerializer
+    # permission_classes = [permissions.IsAdminUser]
+
+    name = 'adres-zamieszkania-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class DokList(generics.ListCreateAPIView):
-
     queryset = Dok.objects.all()
     serializer_class = DokSerializer
 
     name = 'dok-list'
 
-    # filter_fields = ['nazwa', 'iloscMiejsc']
-    # search_fields = ['nazwa', 'kraj', 'wojewodztwo', 'miasto', 'ulica']
-    # ordering_fields = ['nazwa']
+    filter_fields = ['nazwa', 'iloscMiejsc', 'miasto', 'ulica']
+    search_fields = ['nazwa', 'iloscMiejsc', 'miasto', 'ulica']
+    ordering_fields = ['nazwa', 'iloscMiejsc', 'miasto', 'ulica']
 
 
 class DokDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Dok.objects.all()
     serializer_class = DokSerializer
 
     name = 'dok-detail'
-
-    # filter_fields = ['imie', 'nazwisko']
-    # search_fields = ['imie', 'nazwisko']
-    # ordering_fields = ['imie', 'nazwisko']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class LokalizacjaList(generics.ListCreateAPIView):
-
     queryset = Lokalizacja.objects.all()
     serializer_class = LokalizacjaSerializer
 
     name = 'lokalizacja-list'
 
-    # filter_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
-    # search_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
-    # ordering_fields = ['ostatniaAktualizacja']
+    filter_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
+    search_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
+    ordering_fields = ['szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja']
 
 
 class LokalizacjaDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Lokalizacja.objects.all()
     serializer_class = LokalizacjaSerializer
 
     name = 'lokalizacja-Detail'
-
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class PojazdMiejskiList(generics.ListCreateAPIView):
-
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
     name = 'pojazd-miejski-list'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    filter_fields = ['']
+    search_fields = ['']
+    ordering_fields = ['']
 
 
 class PojazdMiejskiDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
     name = 'pojazd-miejski-detail'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class PojazdyWDokachList(generics.ListCreateAPIView):
+class PojazdWDokuList(generics.ListCreateAPIView):
+    queryset = PojazdWDoku.objects.all()
+    serializer_class = PojazdWDokuSerializer
 
-    queryset = PojazdyWDokach.objects.all()
-    serializer_class = PojazdyWDokachSerializer
+    name = 'pojazd-w-doku-list'
 
-    name = 'pojazdy-w-dokach-list'
-
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    filter_fields = ['']
+    search_fields = ['']
+    ordering_fields = ['']
 
 
-class PojazdyWDokachDetail(generics.RetrieveUpdateDestroyAPIView):
+class PojazdWDokuDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PojazdWDoku.objects.all()
+    serializer_class = PojazdWDokuSerializer
 
-    queryset = PojazdyWDokach.objects.all()
-    serializer_class = PojazdyWDokachSerializer
-
-    name = 'pojazdy-w-dokach-detail'
-
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    name = 'pojazd-w-dokau-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class RozliczenieList(generics.ListCreateAPIView):
-
     queryset = Rozliczenie.objects.all()
     serializer_class = RozliczenieSerializer
 
     name = 'rozliczenie-list'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    filter_fields = ['']
+    search_fields = ['']
+    ordering_fields = ['']
 
 
 class RozliczenieDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Rozliczenie.objects.all()
     serializer_class = RozliczenieSerializer
 
     name = 'rozliczenie-detail'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class StawkaList(generics.ListCreateAPIView):
+class StawkaFilter(FilterSet):
+    min_stawka = NumberFilter(field_name='stawka', lookup_expr='gte')
+    max_stawka = NumberFilter(field_name='stawka', lookup_expr='lte')
 
+    class Meta:
+        model = Stawka
+        fields = ['min_stawka', 'max_stawka']
+
+
+class StawkaList(generics.ListCreateAPIView):
     queryset = Stawka.objects.all()
     serializer_class = StawkaSerializer
 
     name = 'stawka-list'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    filter_class = StawkaFilter
+
+    filter_fields = ['']
+    search_fields = ['']
+    ordering_fields = ['']
 
 
 class StawkaDetail(generics.RetrieveUpdateDestroyAPIView):
-
     queryset = Stawka.objects.all()
     serializer_class = StawkaSerializer
 
     name = 'stawka-detail'
 
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class WypozyczeniaList(generics.ListCreateAPIView):
+class WypozyczenieList(generics.ListCreateAPIView):
+    queryset = Wypozyczenie.objects.all()
+    serializer_class = WypozyczenieSerializer
 
-    queryset = Wypozyczenia.objects.all()
-    serializer_class = WypozyczeniaSerializer
+    name = 'wypozyczenie-list'
 
-    name = 'wypozyczenia-list'
-
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    filter_fields = ['']
+    search_fields = ['']
+    ordering_fields = ['']
 
 
-class WypozyczeniaDetail(generics.RetrieveUpdateDestroyAPIView):
+class WypozyczenieDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Wypozyczenie.objects.all()
+    serializer_class = WypozyczenieSerializer
 
-    queryset = Wypozyczenia.objects.all()
-    serializer_class = WypozyczeniaSerializer
-
-    name = 'wypozyczenia-detail'
-
-    # filter_fields = ['']
-    # search_fields = ['']
-    # ordering_fields = ['']
+    name = 'wypozyczenie-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------

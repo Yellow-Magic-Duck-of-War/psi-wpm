@@ -2,8 +2,8 @@ from django.contrib.auth.models import User, Group
 
 from rest_framework import serializers
 
-from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDokach, Rozliczenie, Stawka, Wypozyczenia
-
+from WPM.models import DaneOsobowe, AdresZamieszkania, Dok, Lokalizacja, PojazdMiejski, PojazdWDoku, Rozliczenie,\
+                       Stawka, Wypozyczenie
 
 """
     Ćwiczenie 5.
@@ -23,7 +23,7 @@ from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDok
          (praktycznie wszystkie, musimy sprawdzić czy przychodzące dane są dobrego typu np.
           do pola modelu z datą nie podajemy stringa z przepisem na barszcz).
 
-    50/50 4. Jeżeli dany model wymaga dodatkowej walidacji (np. data stworzenia zamówienia nie może być w przyszłości),
+    X 4. Jeżeli dany model wymaga dodatkowej walidacji (np. data stworzenia zamówienia nie może być w przyszłości),
              tworzymy odpowiednie funkcje.
 
     50/50 5. Nadpisujemy odpowiednie funkcje create, update itp. w momencie gdy musimy zapisać obiekty w inny sposób
@@ -32,70 +32,136 @@ from WPM.models import DaneOsobowe, Dok, Lokalizacja, PojazdMiejski, PojazdyWDok
     ✓ 6. Sprawdzamy, które z utworzonych serializerów możemy zamienić na ModelSerializer,
          i implementujemy gdy to możliwe (Dokumentacja).
 """
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 # Serializer użytkownika:
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
+
         fields = ['url', 'username', 'email', 'groups']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 # Serializer grupy:
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
+
         fields = ['url', 'name']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class DaneOsoboweSerializer(serializers.HyperlinkedModelSerializer):
 
-    wypozyczenia = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='wypozyczenia-detail')
+    wypozyczenie = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='wypozyczenie-detail')
+    rozliczenie = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='rozliczenie-detail')
+    adres_zamieszkania = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                             view_name='adres-zamieszkania-detail')
 
     class Meta:
-
         model = DaneOsobowe
 
-        fields = ['url', 'id', 'imie', 'nazwisko', 'plec', 'dataUrodzenia', 'kraj', 'wojewodztwo', 'miasto', 'ulica',
-                  'kodPocztowy', 'email', 'numerTelefonu', 'wypozyczenia']
+        fields = ['url', 'id', 'imie', 'nazwisko', 'plec', 'dataUrodzenia', 'email', 'numerTelefonu',
+                  'idAdresZamieszkania', 'adres_zamieszkania', 'wypozyczenie', 'rozliczenie']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class AdresZamieszkaniaSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = AdresZamieszkania
+
+        fields = ['url', 'id', 'ulica', 'miasto', 'kodPocztowy']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
 
 class DokSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Dok
-        fields = ['url', 'id', 'nazwa', 'iloscMiejsc', 'kraj', 'wojewodztwo', 'miasto', 'ulica', 'narzedzia']
+
+        fields = ['url', 'id', 'nazwa', 'iloscMiejsc', 'ulica', 'miasto', 'narzedzia']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class LokalizacjaSerializer(serializers.HyperlinkedModelSerializer):
+    pojazd_miejski = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='pojazd-miejski-detail')
+
     class Meta:
         model = Lokalizacja
-        fields = ['url', 'id', 'szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja', 'idPojazdMiejski_id']
+
+        fields = ['url', 'id', 'szerokoscGeograficzna', 'dlugoscGeograficzna', 'ostatniaAktualizacja',
+                  'idPojazdMiejski', 'pojazd_miejski']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class PojazdMiejskiSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PojazdMiejski
+
         fields = ['url', 'id', 'typNapedu', 'rodzaj', 'kolor', 'kodSprzetu', 'wzrost']
 
 
-class PojazdyWDokachSerializer(serializers.HyperlinkedModelSerializer):
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class PojazdWDokuSerializer(serializers.HyperlinkedModelSerializer):
+    dok = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='dok-detail')
+    pojazd_miejski = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='pojazd-miejski-detail')
+
     class Meta:
-        model = PojazdyWDokach
-        fields = ['url', 'id', 'idDok_id', 'idPojazdMiejski_id']
+        model = PojazdWDoku
+
+        fields = ['url', 'id', 'idDok_id', 'idPojazdMiejski', 'dok', 'pojazd_miejski']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class RozliczenieSerializer(serializers.HyperlinkedModelSerializer):
+    wypozyczenia = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='wypozyczenia-detail')
+    stawka = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='stawka-detail')
+
     class Meta:
         model = Rozliczenie
-        fields = ['url', 'id', 'wplata', 'idStawka_id', 'idWypozyczenia_id']
+
+        fields = ['url', 'id', 'wplata', 'idWypozyczenia', 'idStawka', 'wypozyczenia', 'stawka']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class StawkaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stawka
+
         fields = ['url', 'id', 'stawka']
 
 
-class WypozyczeniaSerializer(serializers.HyperlinkedModelSerializer):
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class WypozyczenieSerializer(serializers.HyperlinkedModelSerializer):
+    dane_osobowe = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='dane_osobowe-detail')
+    pojazd_miejski = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='pojazd-miejski-detail')
+
     class Meta:
-        model = Wypozyczenia
-        fields = ['url', 'id', 'dataStart', 'dataStop', 'idDaneOsobowe_id', 'idPojazdMiejski_id']
+        model = Wypozyczenie
+
+        fields = ['url', 'id', 'dataStart', 'dataStop', 'idDaneOsobowe', 'idPojazdMiejski', 'dane_osobowe',
+                  'pojazd_miejski']
+
+# ----------------------------------------------------------------------------------------------------------------------

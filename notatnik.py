@@ -38,7 +38,7 @@
     * Klienci
     
     Users: 
-    * Login: superuser, Hasło: Rok2020Ssie
+    * Login: superusser, Hasło: Rok2020Ssie
     * Login: administrator, Hasło: Kontrabanda69
     * Login: tester001, Hasło: Prochibicja20
 """

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (DaneOsobowe, Wypozyczenia, PojazdMiejski, PojazdyWDokach, Dok,
+from .models import (DaneOsobowe, AdresZamieszkania, Wypozyczenie, PojazdMiejski, PojazdWDoku, Dok,
                      Lokalizacja, Rozliczenie, Stawka)
 
 # Register your models here.
@@ -7,9 +7,10 @@ from .models import (DaneOsobowe, Wypozyczenia, PojazdMiejski, PojazdyWDokach, D
 # admin.site.register() - rejestracja modelów do panuelu admina (będa wydoczne w panelu admina)
 
 admin.site.register(DaneOsobowe)
-admin.site.register(Wypozyczenia)
+admin.site.register(AdresZamieszkania)
+admin.site.register(Wypozyczenie)
 admin.site.register(PojazdMiejski)
-admin.site.register(PojazdyWDokach)
+admin.site.register(PojazdWDoku)
 admin.site.register(Dok)
 admin.site.register(Lokalizacja)
 admin.site.register(Rozliczenie)
