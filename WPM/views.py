@@ -107,7 +107,7 @@ class DaneOsoboweList(generics.ListCreateAPIView):
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
-    name = 'dane-osobowe-list'
+    name = 'daneosobowe-list'
 
     filter_class = DaneOsoboweFilter
 
@@ -129,7 +129,7 @@ class DaneOsoboweDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DaneOsoboweSerializer
     # permission_classes = [permissions.IsAdminUser]
 
-    name = 'dane-osobowe-detail'
+    name = 'daneosobowe-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ class AdresZamieszkaniaDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AdresZamieszkaniaSerializer
     # permission_classes = [permissions.IsAdminUser]
 
-    name = 'adres-zamieszkania-detail'
+    name = 'adreszamieszkania-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -204,7 +204,7 @@ class PojazdMiejskiList(generics.ListCreateAPIView):
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
-    name = 'pojazd-miejski-list'
+    name = 'pojazdmiejski-list'
 
     filter_fields = ['']
     search_fields = ['']
@@ -215,7 +215,7 @@ class PojazdMiejskiDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PojazdMiejski.objects.all()
     serializer_class = PojazdMiejskiSerializer
 
-    name = 'pojazd-miejski-detail'
+    name = 'pojazdmiejski-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ class PojazdWDokuList(generics.ListCreateAPIView):
     queryset = PojazdWDoku.objects.all()
     serializer_class = PojazdWDokuSerializer
 
-    name = 'pojazd-w-doku-list'
+    name = 'pojazdwdoku-list'
 
     filter_fields = ['']
     search_fields = ['']
@@ -236,7 +236,7 @@ class PojazdWDokuDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PojazdWDoku.objects.all()
     serializer_class = PojazdWDokuSerializer
 
-    name = 'pojazd-w-dokau-detail'
+    name = 'pojazdwdokau-detail'
 
 
 # ----------------------------------------------------------------------------------------------------------------------

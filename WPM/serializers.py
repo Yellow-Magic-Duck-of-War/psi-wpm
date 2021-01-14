@@ -23,7 +23,7 @@ from WPM.models import DaneOsobowe, AdresZamieszkania, Dok, Lokalizacja, PojazdM
          (praktycznie wszystkie, musimy sprawdzić czy przychodzące dane są dobrego typu np.
           do pola modelu z datą nie podajemy stringa z przepisem na barszcz).
 
-    X 4. Jeżeli dany model wymaga dodatkowej walidacji (np. data stworzenia zamówienia nie może być w przyszłości),
+    4. Jeżeli dany model wymaga dodatkowej walidacji (np. data stworzenia zamówienia nie może być w przyszłości),
              tworzymy odpowiednie funkcje.
 
     50/50 5. Nadpisujemy odpowiednie funkcje create, update itp. w momencie gdy musimy zapisać obiekty w inny sposób
@@ -61,21 +61,19 @@ class DaneOsoboweSerializer(serializers.HyperlinkedModelSerializer):
 
     wypozyczenie = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='wypozyczenie-detail')
     rozliczenie = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='rozliczenie-detail')
-    adres_zamieszkania = serializers.HyperlinkedRelatedField(many=True, read_only=True,
-                                                             view_name='adres-zamieszkania-detail')
+    # adres_zamieszkania = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='adres-zamieszkania-detail')
 
     class Meta:
         model = DaneOsobowe
 
         fields = ['url', 'id', 'imie', 'nazwisko', 'plec', 'dataUrodzenia', 'email', 'numerTelefonu',
-                  'idAdresZamieszkania', 'adres_zamieszkania', 'wypozyczenie', 'rozliczenie']
+                  'idAdresZamieszkania', 'wypozyczenie', 'rozliczenie']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class AdresZamieszkaniaSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = AdresZamieszkania
 

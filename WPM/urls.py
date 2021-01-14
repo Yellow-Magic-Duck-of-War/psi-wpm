@@ -41,7 +41,8 @@ urlpatterns = [
     path('dane-osobowe/<int:pk>', views.DaneOsoboweDetail.as_view(), name=views.DaneOsoboweDetail.name),
 
     path('aders-zamieszkania', views.AdresZamieszkaniaList.as_view(), name=views.AdresZamieszkaniaList.name),
-    path('aders-zamieszkania/<int:pk>', views.AdresZamieszkaniaDetail.as_view(), name=views.AdresZamieszkaniaDetail.name),
+    path('aders-zamieszkania/<int:pk>', views.AdresZamieszkaniaDetail.as_view(),
+         name=views.AdresZamieszkaniaDetail.name),
 
     path('dok', views.DokList.as_view(), name=views.DokList.name),
     path('dok/<int:pk>', views.DokDetail.as_view(), name=views.DokDetail.name),

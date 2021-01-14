@@ -43,7 +43,7 @@ class DaneOsobowe(models.Model):
 class AdresZamieszkania(models.Model):
 
     ulica = models.CharField(max_length=100)
-    miasto = models.CharField(max_length=100, default="Olsztyn")
+    miasto = models.CharField(max_length=100, default='Olsztyn')
     kodPocztowy = models.CharField(max_length=9)
 
     # Sortowanie po:
